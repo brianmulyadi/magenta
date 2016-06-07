@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<!-- Basic Page Needs
+	–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+	<meta charset="utf-8">
+	<title>ladyDelivery</title>
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<!-- Mobile Specific Metas
+	–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!-- TYPEFACE
+	–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600" rel="stylesheet" type="text/css">
+
+	<!-- CSS
+	–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+	<link rel="stylesheet" href="css/normalize.css">
+	<link rel="stylesheet" href="css/skeleton.css">
+
+	<!-- Favicon
+	–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+	<link rel="icon" type="image/png" href="images/favicon.png">
+
+    <!-- Dependencies -->
+    <script src="https://www.gstatic.com/firebasejs/3.0.0/firebase.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+
+		<!--<script src="js/script.js"></script>-->
+		<script src="js/moment.js"></script>
+    <script src="js/addOrder.js"></script>
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- Primary Page Layout
+–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+<div class="container">
+	<div class="row">
+	  <div class="u-full-width" style="margin-top: 10%">
+	    <h4>Delivery Dashboard</h4>
+	    <p>Lady Delivery order management system. Check out the <a href="http://www.getskeleton.com">API Documentation</a>.</p>
+	  </div>
+	</div>
+
+	<div class="row">
+		<!-- The above form looks like this -->
+		<form>
+			<h5>From:</h5>
+		  <div class="row">
+		    <div class="six columns">
+		      <label for="fromName">Name</label>
+		      <input class="u-full-width" placeholder="Full Name" id="fromName">
+		    </div>
+		    <div class="six columns">
+		      <label for="fromContactNo">Contact No.</label>
+		      <input class="u-full-width" placeholder="08xxx" id="fromContactNo">
+		    </div>
+		  </div>
+		  <label for="fromAddress">Address</label>
+		  <textarea class="u-full-width" placeholder="Full Address" id="fromAddress"></textarea>
+
+		  <!-- break -->
+
+		  <h5>To:</h5>
+		  <div class="row">
+		    <div class="six columns">
+		      <label for="toName">Name</label>
+		      <input class="u-full-width" placeholder="Full Name" id="toName">
+		    </div>
+		    <div class="six columns">
+		      <label for="toContactNo">Contact No.</label>
+		      <input class="u-full-width" placeholder="08xxx" id="toContactNo">
+		    </div>
+		  </div>
+		  <label for="toAddress">Address</label>
+		  <textarea class="u-full-width" placeholder="Full Address" id="toAddress"></textarea>
+
+		  <!-- break -->
+		  <h5>Delivery Details:</h5>
+		  <div class="row">
+			  <div class="u-full-width">
+				  <label for="itemDesc">Item description</label>
+				  <textarea class="u-full-width" placeholder="Item Description here" id="itemDesc"></textarea>
+				</div>
+			</div>
+
+			<!-- break -->
+			</br>
+		  <button class="button-primary" id="add-order">Send</button>
+		</form>
+
+	</div>
+
+</div>
+
+
+<!-- End Document
+–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+</body>
+</html>

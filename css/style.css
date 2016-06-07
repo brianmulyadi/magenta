@@ -1,0 +1,54 @@
+td p {
+	margin-bottom: 0;
+}
+
+.strong {
+	font-weight: bold;
+}
+
+.status-button {
+	padding: 0 5px;
+	margin-right: 5px;
+	width: 120px;
+}
+
+.status-checkbox input {
+	display:none;
+}
+
+/* default styling for our labels */
+.status-checkbox label     { 
+  display: inline-block;
+  height: 38px;
+  padding: 0 10px;
+  color: #555;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 38px;
+  letter-spacing: .1rem;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  background-color: transparent;
+  border-radius: 4px;
+  border: 1px solid #bbb;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+/* if the label is checked */
+
+
+/* if the label is not checked  */
+.status-checkbox input:not(:checked) + label { 
+  color: #555;
+  background-color: transparent;
+  border-color: #bbb;
+} 
+
+.status-checkbox input:checked + label { 
+  color: #FFF;
+  background-color: #33C3F0;
+  border-color: #33C3F0; 
+}

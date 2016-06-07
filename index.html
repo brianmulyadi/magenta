@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<!-- Basic Page Needs
+	–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+	<meta charset="utf-8">
+	<title>ladyDelivery</title>
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<!-- Mobile Specific Metas
+	–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!-- TYPEFACE
+	–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600" rel="stylesheet" type="text/css">
+
+	<!-- CSS
+	–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+	<link rel="stylesheet" href="css/normalize.css">
+	<link rel="stylesheet" href="css/skeleton.css">
+
+	<!-- Favicon
+	–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+	<link rel="icon" type="image/png" href="images/favicon.png">
+
+    <!-- Dependencies -->
+    <script src="https://www.gstatic.com/firebasejs/3.0.3/firebase.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+    <script src="js/addOrder.js"></script>
+    
+    <script src="js/moment.js"></script>
+    
+
+    <!-- Angular Fire Let's Go FIYAH -->
+    <!-- AngularJS -->
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular-resource.min.js"></script>
+
+
+	<!-- AngularFire -->
+	<script src="https://cdn.firebase.com/libs/angularfire/2.0.0/angularfire.min.js"></script>
+
+	<!-- <script src="js/script.js"></script>-->
+	<script src="js/angularfire.js"></script>
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- Primary Page Layout
+–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+<div class="container" ng-app="ladyDeliveryApp" ng-controller="mainController">
+<div class="row">
+  <div class="eight columns" style="margin-top: 10%">
+    <h4>Delivery Dashboard</h4>
+    <p>Lady Delivery order management system. Check out the <a href="http://www.getskeleton.com">API Documentation</a>.</p>
+  </div>
+  <div class="four columns" style="margin-top: 10%; text-align:right">
+    <p id="timestamp">last updated at</br></p>
+  </div>
+</div>
+
+<!--
+<div class="row" ng-repeat="pushID in order">
+              
+      <h2>{{ pushID.order_id }}</h2>
+      
+      <div class="row" ng-repeat="stat in pushID.status">       
+        <input type="checkbox" id="{{ pushID.order_id }}-{{ $index  }}" ng-model="stat.active" ng-disabled="stat.active">
+        <label for="{{ pushID.order_id }}-{{ $index }}">{{ stat }}<br>
+        <span ng-if="stat.active">Booked</span>
+        <span ng-if="!stat.active">Available</span>
+        </label>
+      </div>
+</div>-->
+
+<div class="row">
+	<table class="u-full-width">
+		<thead>
+			<tr>
+				<th>ORDER_ID</th>
+				<th>FROM</th>
+				<th>TO</th>
+				<th>ITEM</th>
+				<th>STATUS</th>
+			</tr>
+		</thead>
+		<tbody id="orderList">
+			<tr ng-repeat="pushID in order">
+				<td>{{ pushID.order_id }}</td>
+				<td>
+					<p>{{ pushID.from.name }}</p>
+					<p>{{ pushID.from.phone_no }}</p>
+					<p>{{ pushID.from.address }}</p>
+				</td>
+				<td>
+					<p>{{ pushID.to.name }}</p>
+					<p>{{ pushID.to.phone_no }}</p>
+					<p>{{ pushID.to.address }}</p>
+				</td>
+				<td>{{ pushID.item }}</td>
+				<td class="status-checkbox">
+					<input type="checkbox" id="{{ pushID.order_id }}-0"  ng-model="pushID.status.posted.active">
+					<label for="{{ pushID.order_id }}-0">Posted</label>
+					<input type="checkbox" id="{{ pushID.order_id }}-1"  ng-model="pushID.status.picked.active">
+					<label for="{{ pushID.order_id }}-1">Picked-Up</label>
+					<input type="checkbox" id="{{ pushID.order_id }}-2"  ng-model="pushID.status.delivered.active">
+					<label for="{{ pushID.order_id }}-2">Delivered</label>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+</div>
+
+<!-- End Document
+–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+
+</body>
+</html>
+
+<!--
+<tr>
+				<td>00001</td>
+				<td><p class="strong">Brian Mulyadi</p>
+						<p>+6287776644633</p>
+						<p>Taman Kencana E1/30, Cengkareng, Jakarta Barat</p></td>
+				<td><p class="strong">Brian Mulyadi</p>
+						<p>+6287776644633</p>
+						<p>Taman Kencana E1/30, Cengkareng, Jakarta Barat</p>
+				<td>Brosur(10)</td>
+				<td>Order placed</td>
+			</tr>
+			-->
