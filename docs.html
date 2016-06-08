@@ -57,13 +57,13 @@
 	            <div id="setupNavPopover" class="popover">
 	              <ul class="popover-list">
 	                <li class="popover-item">
-	                  <a class="popover-link" href="#post">authentication</a>
+	                  <a class="popover-link" href="#auth">authentication</a>
 	                </li>
 	                <li class="popover-item">
-	                  <a class="popover-link" href="#typography">order form</a>
+	                  <a class="popover-link" href="#orderform">order form</a>
 	                </li>
 	                <li class="popover-item">
-	                  <a class="popover-link" href="#typography">JSON tree</a>
+	                  <a class="popover-link" href="#json">JSON tree</a>
 	                </li>
 	              </ul>
 	            </div>
@@ -73,13 +73,13 @@
 	            <div id="orderNavPopover" class="popover">
 	              <ul class="popover-list">
 	                <li class="popover-item">
-	                  <a class="popover-link" href="#post">add</a>
+	                  <a class="popover-link" href="#addOrder">add</a>
 	                </li>
 	                <li class="popover-item">
 	                  <a class="popover-link" href="#typography">confirmation</a>
 	                </li>
 	                <li class="popover-item">
-	                  <a class="popover-link" href="#typography">error codes</a>
+	                  <a class="popover-link" href="#errorCodes">error codes</a>
 	                </li>
 	                <li class="popover-item">
 	                  <a class="popover-link" href="#typography">check status</a>
@@ -103,43 +103,211 @@
 		<p>For further inquiries, please do not hesitate to contact us at <a href="">dev@ladyjek.com</a></p>
 	</div>
 
-	<div id="post" class="docs-section">
-		<h6 class="docs-header">POST request</h6>
-		<p>Welcome to LadyJek's delivery API. The LadyJek API is organized around REST. Our API has predictable, resource-oriented URLs, and uses HTTP response codes to indicate API errors.</p>
-		<p>For further inquiries, please do not hesitate to contact us at <a href="">dev@ladyjek.com</a></p>
-	
-	<!-- CODE EXAMPLE ———————————————————————————————————————— -->
-	<pre class="code-example">
-	<code class="code-example-body prettyprint">
-<!-- .container is main centered wrapper -->
-	<div class="container">
-
-	  <!-- columns should be the immediate child of a .row -->
-	  <div class="row">
-	    <div class="one column">One</div>
-	    <div class="eleven columns">Eleven</div>
-	  </div>
-
-	  <!-- just use a number and class 'column' or 'columns' -->
-	  <div class="row">
-	    <div class="two columns">Two</div>
-	    <div class="ten columns">Ten</div>
-	  </div>
-
-	  <!-- there are a few shorthand columns widths as well -->
-	  <div class="row">
-	    <div class="one-third column">1/3</div>
-	    <div class="two-thirds column">2/3</div>
-	  </div>
-	  <div class="row">
-	    <div class="one-half column">1/2</div>
-	    <div class="one-half column">1/2</div>
-	  </div>
-
+	<div id="auth" class="docs-section">
+		<h6 class="docs-header">Authentication</h6>
+		<p>Authenticate your account when using the API by including your secret API key / client ID in your <a>POST request</a>. Your API keys carry many privileges, so be sure to keep them secret! Do not share your secret API keys in publicly accessible areas such as GitHub, client-side code, and so forth.</p>
+		<p>All API requests must be made over <a>HTTPS</a>. Calls made over plain HTTP will fail. API requests without authentication will also fail.</p>
 	</div>
-	</code>
-	</pre>
-	<!-- ————————————————————————————————————————————————————— -->
+
+	<div id="orderform" class="docs-section">
+		<h6 class="docs-header">Setting-up your order form</h6>
+		<p>In order to successfully submit your delivery requests, LadyJek API requires a specific structure along with the necessary input items for each order.</p>
+		<p>The necessary data fields that have to be present in the form are as follows:</p>
+		<ul>
+			<li><strong>From:</strong>
+				<ul>
+					<li>Full Name</li>
+					<li>Contact No.</li>
+					<li>Address (including zip code)</li>
+				</ul>
+			</li>
+			<li><strong>To:</strong>
+				<ul>
+					<li>Full Name</li>
+					<li>Contact No.</li>
+					<li>Address (including zip code)</li>
+				</ul>
+			</li>
+			<li><strong>Item Description</strong></li>
+		</ul>
+		</br>
+		<p>Example form:</p>
+		<!-- CODE EXAMPLE ———————————————————————————————————————— -->
+		<pre class="code-example">
+		<code class="code-example-body prettyprint">
+$(document).ready(function(){
+	$('form').on('submit', function(e) {
+	  e.preventDefault();
+
+	  // variable declarations
+
+	  var $fromName = $('#fromName');
+	  var $fromContactNo = $('#fromContactNo');
+	  var $fromAddress = $('#fromAddress');
+	  var $toName = $('#toName');
+	  var $toContactNo = $('#toContactNo');
+	  var $toAddress = $('#toAddress');
+	  var $itemDesc = $('#itemDesc');
+	  var $addOrder = $('#add-order');
+	  var $clientId = "EawDasGgVcMWh4s4GCeiItmIVtU2";
+
+	  // JSON data
+	  ...
+
+	  // POST ajax
+	  ...
+
+	});
+}):
+		</code>
+		</pre>
+		<!-- ————————————————————————————————————————————————————— -->
+	</div>
+
+	<div id="json" class="docs-section">
+		<h6 class="docs-header">JSON tree</h6>
+		<p>LadyJek Delivery API uses <a>JSON</a> data structure to organize and manage delivery orders. To avoid any error when submitting the order, the following JSON tree structure has to be followed.</p>
+		<!-- CODE EXAMPLE ———————————————————————————————————————— -->
+		<pre class="code-example">
+		<code class="code-example-body prettyprint">
+// variable declarations
+...
+
+// JSON data
+
+	var newOrder = {
+	      "client_id": $clientId,
+	      "order_id": $.now(),
+	      "date": $formatDate,
+	      "from": {
+	          "name": $fromName.val(),
+	          "phone_no": $fromContactNo.val(),
+	          "address": $fromAddress.val(),
+	      },
+	      "to": {
+	          "name": $toName.val(),
+	          "phone_no": $toContactNo.val(),
+	          "address": $toAddress.val(),
+	      },
+	      "item": $itemDesc.val(),
+	      "status": {
+	          "posted": {
+	              "active": true,
+	              "time": $formatTime,
+	          },
+	          "picked": {
+	              "active": false,
+	              "time": "",
+	          },
+	          "delivered": {
+	              "active": false,
+	              "time": "",
+	          },
+	      },
+  };
+
+// POST ajax
+...
+
+		</code>
+		</pre>
+		<!-- ————————————————————————————————————————————————————— -->
+	</div>
+
+	<div id="addOrder" class="docs-section">
+		<h6 class="docs-header">Add an order</h6>
+		<p>Once our form is ready, adding an order is just a simple POST request away. Using your preferred method, assign a button that will generate an HTTP POST request to our API endpoint.</p>
+		<p>The following example will use AJAX to generate a POST request to <a>http://www.lady-delivery.firebaseio.com/order.json</a></p>
+		<!-- CODE EXAMPLE ———————————————————————————————————————— -->
+		<pre class="code-example">
+		<code class="code-example-body prettyprint">
+// variable declarations
+...
+
+// JSON data
+...
+
+// POST ajax
+
+$.ajax({
+    type: 'POST',
+    url: 'https://lady-delivery.firebaseio.com/order.json',
+    contentType: "application/json; charset=utf-8",
+    data: JSON.stringify(newOrder),
+    success: function(data) {
+        console.log("Order added!", data);
+    },
+    error: function (jqXHR) {
+        if (jqXHR.status == 401) {
+            alert("401: Authentication Error!");
+        } else if (jqXHR.status == 400) {
+            alert("400: Invalid data format in input");
+        };
+    }
+});
+
+		</code>
+		</pre>
+		<!-- ————————————————————————————————————————————————————— -->
+	</div>
+
+	<div id="errorCodes" class="docs-section">
+		<h6 class="docs-header">Errors</h6>
+		<p>LadyJek uses conventional HTTP response codes to indicate the success or failure of an API request. In general, codes in the <a>2xx</a> range indicate success, codes in the <a>4xx</a> range indicate an error that failed given the information provided, and codes in the <a>5xx</a> range indicate an error with LadyJek's servers (these are rare).</p>
+		<p>Not all errors map cleanly onto HTTP response codes, however. When a request is valid but does not complete successfully, we return a 402 error code.</p>
+		</br>
+		<p><strong>HTTP status code summary</strong></p>
+		<table class="u-full-width">
+		  <thead>
+		    <tr>
+		      <th>Code</th>
+		      <th>Name</th>
+		      <th>Description</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		    <tr>
+		      <td>200</td>
+		      <td>OK</td>
+		      <td>Everything worked as expected</td>
+		    </tr>
+		    <tr>
+		      <td>400</td>
+		      <td>Bad Request</td>
+		      <td>The request was unacceptable, often due to missing a required parameter.</td>
+		    </tr>
+		    <tr>
+		      <td>401</td>
+		      <td>Unauthorized</td>
+		      <td>No valid API key provided.</td>
+		    </tr>
+		    <tr>
+		      <td>402</td>
+		      <td>Request Failed</td>
+		      <td>The parameters were valid but the request failed.</td>
+		    </tr>
+		    <tr>
+		      <td>404</td>
+		      <td>Not Found</td>
+		      <td>The requested resource doesn't exist.</td>
+		    </tr>
+		    <tr>
+		      <td>409</td>
+		      <td>Conflict</td>
+		      <td>The request conflicts with another request (perhaps due to error in assigning order ID).</td>
+		    </tr>
+		    <tr>
+		      <td>429</td>
+		      <td>Too Many Requests</td>
+		      <td>Too many requests hit the API too quickly.</td>
+		    </tr>
+		    <tr>
+		      <td>500, 502, 503, 504</td>
+		      <td>Server Errors</td>
+		      <td>Oops, something went wrong on LadyJek's end. <a>Let us know!</a></td>
+		    </tr>
+		  </tbody>
+		</table>
 	</div>
 
 </div>
@@ -149,3 +317,10 @@
 
 </body>
 </html>
+
+<!-- CODE EXAMPLE ————————————————————————————————————————
+<pre class="code-example">
+<code class="code-example-body prettyprint">
+</code>
+</pre>
+—————————————————————————————————————————————————————-->
