@@ -25,22 +25,47 @@
 	<!-- Favicon
 	–––––––––––––––––––––––––––––––––––––––––––––––––– -->
 	<link rel="icon" type="image/png" href="images/favicon.png">
+
+	<!-- JS
+	–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script src="js/animate.js"></script>
     
 </head>
 <body>
 
 <!-- Primary Page Layout
 –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-<div class="container" ng-app="ladyDeliveryApp" ng-controller="mainController">
+<div class="container">
 	<div class="row">
-		<div class="eight columns" style="margin-top: 10%">
-			<h4>Delivery Dashboard</h4>
-			<p>Lady Delivery order management system. Check out the <a href="http://www.getskeleton.com">API Documentation</a>.</p>
-		</div>
-		<div class="four columns" style="margin-top: 10%; text-align:right">
-			<p id="timestamp">last updated at</br></p>
+		<div class="u-full-width" style="margin-top: 10%">
+			<h4>LadyJek Delivery | <strong>API</strong></h4>
+			<p>Welcome to LadyJek's delivery API. The LadyJek API is organized around REST. Our API has predictable, resource-oriented URLs, and uses HTTP response codes to indicate API errors.</p>
+			<p>For further inquiries, please do not hesitate to contact us at <a href="">dev@ladyjek.com</a></p>
 		</div>
 	</div>
+
+	<nav class="navbar">
+		<div class="container">
+			<ul class="navbar-list">
+			<li class="navbar-item"><a href="" class="navbar-link">intro</a></li>
+			<li class="navbar-item">
+				<a class="navbar-link" href="#" data-popover="#codeNavPopover">Code</a>
+            <div id="codeNavPopover" class="popover">
+              <ul class="popover-list">
+                <li class="popover-item">
+                  <a class="popover-link" href="#grid">Grid</a>
+                </li>
+                <li class="popover-item">
+                  <a class="popover-link" href="#typography">Typography</a>
+                </li>
+              </ul>
+            </div>
+			</li>
+			</ul>
+		</div>
+	</nav>
+
 </div>
 
 <!-- End Document
