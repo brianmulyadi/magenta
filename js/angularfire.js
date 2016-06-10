@@ -41,3 +41,16 @@ angularApp.controller("mainController", function($scope, $firebaseObject){
 	// three way data binding
 	syncObject.$bindTo($scope, 'order');
 });
+
+/*
+var databaseRef = database.ref().child('order');
+
+databaseRef.on('child_added', function(snapshot) {
+		var order_id_snap = snapshot.val();
+		addOrderId(order_id_snap);
+});
+
+function addOrderId(order_id_snap) {
+	var order_td = document.createElement('td');
+	order_td.innerText = order_id_snap
+}*/

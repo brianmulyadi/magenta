@@ -52,7 +52,7 @@
 
 <!-- Primary Page Layout
 –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-<div class="container" ng-app="ladyDeliveryApp" ng-controller="mainController">
+<div class="container" style="max-width: 1400px" ng-app="ladyDeliveryApp" ng-controller="mainController">
 <div class="row">
   <div class="eight columns" style="margin-top: 10%">
     <h4>Delivery Dashboard</h4>
@@ -89,26 +89,26 @@
 			</tr>
 		</thead>
 		<tbody id="orderList">
-			<tr ng-repeat="pushID in order">
-				<td>{{ pushID.order_id }}</td>
-				<td>
-					<p>{{ pushID.from.name }}</p>
-					<p>{{ pushID.from.phone_no }}</p>
-					<p>{{ pushID.from.address }}</p>
+			<tr ng-repeat="(pushID, pushObj) in order">
+				<td style="max-width: 100px; word-wrap: break-word">{{ pushID.replace('-','') }}</td>
+				<td style="max-width: 150px">
+					<p><strong>{{ pushObj.from.name }}</strong></p>
+					<p>{{ pushObj.from.phone_no }}</p>
+					<p>{{ pushObj.from.address }}</p>
 				</td>
-				<td>
-					<p>{{ pushID.to.name }}</p>
-					<p>{{ pushID.to.phone_no }}</p>
-					<p>{{ pushID.to.address }}</p>
+				<td style="max-width: 150px">
+					<p><strong>{{ pushObj.to.name }}</strong></p>
+					<p>{{ pushObj.to.phone_no }}</p>
+					<p>{{ pushObj.to.address }}</p>
 				</td>
-				<td>{{ pushID.item }}</td>
+				<td style="max-width: 100px">{{ pushObj.item }}</td>
 				<td class="status-checkbox">
-					<input type="checkbox" id="{{ pushID.order_id }}-0"  ng-model="pushID.status.posted.active">
-					<label for="{{ pushID.order_id }}-0">Posted</label>
-					<input type="checkbox" id="{{ pushID.order_id }}-1"  ng-model="pushID.status.picked.active">
-					<label for="{{ pushID.order_id }}-1">Picked-Up</label>
-					<input type="checkbox" id="{{ pushID.order_id }}-2"  ng-model="pushID.status.delivered.active">
-					<label for="{{ pushID.order_id }}-2">Delivered</label>
+					<input type="checkbox" id="{{ pushObj.order_id }}-0"  ng-model="pushObj.status.posted.active">
+					<label for="{{ pushObj.order_id }}-0">Posted</label>
+					<input type="checkbox" id="{{ pushObj.order_id }}-1"  ng-model="pushObj.status.picked.active">
+					<label for="{{ pushObj.order_id }}-1">Picked-Up</label>
+					<input type="checkbox" id="{{ pushObj.order_id }}-2"  ng-model="pushObj.status.delivered.active">
+					<label for="{{ pushObj.order_id }}-2">Delivered</label>
 				</td>
 			</tr>
 		</tbody>
