@@ -65,6 +65,9 @@
 	                <li class="popover-item">
 	                  <a class="popover-link" href="#json">JSON tree</a>
 	                </li>
+	                <li class="popover-item">
+	                  <a class="popover-link" href="#sandbox">Sandbox</a>
+	                </li>
 	              </ul>
 	            </div>
 				</li>
@@ -99,14 +102,21 @@
 
 	<div id="intro" class="docs-section">
 		<h6 class="docs-header">Getting Started</h6>
-		<p>Welcome to LadyJek's delivery API. The LadyJek API is organized around REST. Our API has predictable, resource-oriented URLs, and uses HTTP response codes to indicate API errors.</p>
-		<p>For further inquiries, please do not hesitate to contact us at <a href="">dev@ladyjek.com</a></p>
+		<p>These are the steps to implement LadyJek Delivery API in your system:</p>
+		<ol>
+			<li>Get in touch with us to confirm our partnership <a>here</a></li>
+			<li>Receive your client ID in order to pass our <a href="#auth">authentication</a> gateway for your orders</li>
+			<li>Develop your order form and link it with our <a>sandbox</a> API endpoints to start testing</li>
+			<li>Move on to the launch phase and ship! &#128640;
+</li>
+		</ol>
 	</div>
 
 	<div id="auth" class="docs-section">
 		<h6 class="docs-header">Authentication</h6>
 		<p>Authenticate your account when using the API by including your secret API key / client ID in your <a>POST request</a>. Your API keys carry many privileges, so be sure to keep them secret! Do not share your secret API keys in publicly accessible areas such as GitHub, client-side code, and so forth.</p>
 		<p>All API requests must be made over <a>HTTPS</a>. Calls made over plain HTTP will fail. API requests without authentication will also fail.</p>
+		<p style="font-style: italic">* for the current being, your client ID will be sent to you through an authorization email.</p>
 	</div>
 
 	<div id="orderform" class="docs-section">
@@ -149,7 +159,7 @@ $(document).ready(function(){
 	  var $toAddress = $('#toAddress');
 	  var $itemDesc = $('#itemDesc');
 	  var $addOrder = $('#add-order');
-	  var $clientId = "EawDasGgVcMWh4s4GCeiItmIVtU2";
+	  var $clientId = "..."; // insert your client ID here
 
 	  // JSON data
 	  ...
@@ -214,10 +224,19 @@ $(document).ready(function(){
 		<!-- ————————————————————————————————————————————————————— -->
 	</div>
 
+	<div id="sandbox" class="docs-section">
+		<h6 class="docs-header">Sandbox</h6>
+		<p>The LadyJek Delivery API Sandbox is for you to test the functionality of your application without making legitimate calls to our main delivery platform. All request to the sandbox API endpoints will be ephemeral.</p>
+		<p>The requests to the sandbox environment can be sent to this url:</p>
+		<pre class="code-example"><code class="code-example-body prettyprint">https://lady-delivery-sandbox.firebaseio.com/order.json</code></pre>
+	</div>
+
 	<div id="addOrder" class="docs-section">
 		<h6 class="docs-header">Add an order</h6>
 		<p>Once our form is ready, adding an order is just a simple POST request away. Using your preferred method, assign a button that will generate an HTTP POST request to our API endpoint.</p>
-		<p>The following example will use AJAX to generate a POST request to <a>http://www.lady-delivery.firebaseio.com/order.json</a></p>
+		<p>The following example will use AJAX to generate a POST request to:</p>
+		<pre class="code-example"><code class="code-example-body prettyprint">https://lady-delivery.firebaseio.com/order/{order_id}</code></pre>
+
 		<!-- CODE EXAMPLE ———————————————————————————————————————— -->
 		<pre class="code-example">
 		<code class="code-example-body prettyprint">
@@ -237,13 +256,8 @@ $.ajax({
     success: function(data) {
         console.log("Order added!", data);
     },
-    error: function (jqXHR) {
-        if (jqXHR.status == 401) {
-            alert("401: Authentication Error!");
-        } else if (jqXHR.status == 400) {
-            alert("400: Invalid data format in input");
-        };
-    }
+    // error: function
+    	// ...
 });
 
 		</code>
@@ -251,10 +265,18 @@ $.ajax({
 		<!-- ————————————————————————————————————————————————————— -->
 	</div>
 
+	<div id="confirmation" class="docs-section">
+		<h6 class="docs-header">Confirmation</h6>
+		<p>When you have successfully added an order, you will be able to retrieve your order in a JSON format at the following url:</p>
+		<pre class="code-example"><code class="code-example-body prettyprint">https://lady-delivery.firebaseio.com/order/{order_id}</code></pre></br>
+		<p>The same method can also be applied to your sandbox environment.</p>
+		<pre class="code-example"><code class="code-example-body prettyprint">https://lady-delivery-sandbox.firebaseio.com/order/{order_id}</code></pre>
+	</div>
+
 	<div id="errorCodes" class="docs-section">
 		<h6 class="docs-header">Errors</h6>
-		<p>LadyJek uses conventional HTTP response codes to indicate the success or failure of an API request. In general, codes in the <a>2xx</a> range indicate success, codes in the <a>4xx</a> range indicate an error that failed given the information provided, and codes in the <a>5xx</a> range indicate an error with LadyJek's servers (these are rare).</p>
-		<p>Not all errors map cleanly onto HTTP response codes, however. When a request is valid but does not complete successfully, we return a 402 error code.</p>
+		<p>LadyJek uses conventional HTTP response codes to indicate the success or failure of an API request. In general, codes in the <code class="code-example-body">2xx</code> range indicate success, codes in the <code class="code-example-body">4xx</code> range indicate an error that failed given the information provided, and codes in the <code class="code-example-body">5xx</code> range indicate an error with LadyJek's servers (these are rare).</p>
+		<p>Not all errors map cleanly onto HTTP response codes, however. When a request is valid but does not complete successfully, we return a <code class="code-example-body">402</code> error code.</p>
 		</br>
 		<p><strong>HTTP status code summary</strong></p>
 		<table class="u-full-width">
@@ -308,6 +330,27 @@ $.ajax({
 		    </tr>
 		  </tbody>
 		</table>
+	</div>
+
+	<div id="checkStatus" class="docs-section">
+		<h6 class="docs-header">Check order status</h6>
+		<p>The LadyJek Delivery API Sandbox is for you to test the functionality of your application without making legitimate calls to our main delivery platform. All request to the sandbox API endpoints will be ephemeral.</p>
+		<p>The requests to the sandbox environment can be sent to this url:</p>
+		<pre class="code-example"><code class="code-example-body prettyprint">https://lady-delivery-sandbox.firebaseio.com/order.json</code></pre>
+	</div>
+
+	<div id="updateOrder" class="docs-section">
+		<h6 class="docs-header">Update delivery details</h6>
+		<p>The LadyJek Delivery API Sandbox is for you to test the functionality of your application without making legitimate calls to our main delivery platform. All request to the sandbox API endpoints will be ephemeral.</p>
+		<p>The requests to the sandbox environment can be sent to this url:</p>
+		<pre class="code-example"><code class="code-example-body prettyprint">https://lady-delivery-sandbox.firebaseio.com/order.json</code></pre>
+	</div>
+
+	<div id="cancelOrder" class="docs-section">
+		<h6 class="docs-header">Cancel an order</h6>
+		<p>The LadyJek Delivery API Sandbox is for you to test the functionality of your application without making legitimate calls to our main delivery platform. All request to the sandbox API endpoints will be ephemeral.</p>
+		<p>The requests to the sandbox environment can be sent to this url:</p>
+		<pre class="code-example"><code class="code-example-body prettyprint">https://lady-delivery-sandbox.firebaseio.com/order.json</code></pre>
 	</div>
 
 </div>
