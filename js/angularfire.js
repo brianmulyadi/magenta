@@ -30,8 +30,8 @@ var angularApp = angular.module('ladyDeliveryApp', ['firebase']);
 angularApp.controller("mainController", function($scope, $firebaseObject){
 
 	// connect to Firebase
-	var ref = firebase.database().ref();
-	$scope.data = $firebaseObject(ref);
+	// var ref = firebase.database().ref();
+	// $scope.data = $firebaseObject(ref);
 
 	var ref = firebase.database().ref().child('order');
 
@@ -40,7 +40,15 @@ angularApp.controller("mainController", function($scope, $firebaseObject){
 
 	// three way data binding
 	syncObject.$bindTo($scope, 'order');
+
 });
+
+/* "order": {
+      "$singleOrder": {
+        ".write": "newData.child('client_id').val() == 'EawDasGgVcMWh4s4GCeiItmIVtU2'"
+      }
+    }
+*/
 
 /*
 var databaseRef = database.ref().child('order');

@@ -79,19 +79,19 @@
 	                  <a class="popover-link" href="#addOrder">add</a>
 	                </li>
 	                <li class="popover-item">
-	                  <a class="popover-link" href="#typography">confirmation</a>
+	                  <a class="popover-link" href="#confirmation">confirmation</a>
 	                </li>
 	                <li class="popover-item">
 	                  <a class="popover-link" href="#errorCodes">error codes</a>
 	                </li>
 	                <li class="popover-item">
-	                  <a class="popover-link" href="#typography">check status</a>
+	                  <a class="popover-link" href="#checkStatus">check status</a>
 	                </li>
 	                <li class="popover-item">
-	                  <a class="popover-link" href="#typography">update</a>
+	                  <a class="popover-link" href="#updateOrder">update</a>
 	                </li>
 	                <li class="popover-item">
-	                  <a class="popover-link" href="#typography">cancel</a>
+	                  <a class="popover-link" href="#cancelOrder">cancel</a>
 	                </li>
 	              </ul>
 	            </div>
@@ -106,7 +106,7 @@
 		<ol>
 			<li>Get in touch with us to confirm our partnership <a>here</a></li>
 			<li>Receive your client ID in order to pass our <a href="#auth">authentication</a> gateway for your orders</li>
-			<li>Develop your order form and link it with our <a>sandbox</a> API endpoints to start testing</li>
+			<li>Develop your order form and link it with our <a href="#sandbox">sandbox</a> API endpoints to start testing</li>
 			<li>Move on to the launch phase and ship! &#128640;
 </li>
 		</ol>
@@ -114,7 +114,7 @@
 
 	<div id="auth" class="docs-section">
 		<h6 class="docs-header">Authentication</h6>
-		<p>Authenticate your account when using the API by including your secret API key / client ID in your <a>POST request</a>. Your API keys carry many privileges, so be sure to keep them secret! Do not share your secret API keys in publicly accessible areas such as GitHub, client-side code, and so forth.</p>
+		<p>Authenticate your account when using the API by including your secret API key / client ID in your <a>POST</a> request. Your API keys carry many privileges, so be sure to keep them secret! Do not share your secret API keys in publicly accessible areas such as GitHub, client-side code, and so forth.</p>
 		<p>All API requests must be made over <a>HTTPS</a>. Calls made over plain HTTP will fail. API requests without authentication will also fail.</p>
 		<p style="font-style: italic">* for the current being, your client ID will be sent to you through an authorization email.</p>
 	</div>
@@ -334,23 +334,57 @@ $.ajax({
 
 	<div id="checkStatus" class="docs-section">
 		<h6 class="docs-header">Check order status</h6>
-		<p>The LadyJek Delivery API Sandbox is for you to test the functionality of your application without making legitimate calls to our main delivery platform. All request to the sandbox API endpoints will be ephemeral.</p>
-		<p>The requests to the sandbox environment can be sent to this url:</p>
-		<pre class="code-example"><code class="code-example-body prettyprint">https://lady-delivery-sandbox.firebaseio.com/order.json</code></pre>
+		<p>LadyJek Delivery API currently provides three stages for the information on delivery progress. The three stages are:</p>
+		<ul>
+			<li><code class="code-example-body prettyprint">posted</code> : The order is successfully received by LadyJek as a delivery request. The default value is <code class="code-example-body prettyprint">true</code></li>
+			<li><code class="code-example-body prettyprint">picked</code> : LadyJek biker has picked up the item from the trip origin. The default value is <code class="code-example-body prettyprint">false</code></li>
+			<li><code class="code-example-body prettyprint">delivered</code> : The item has been successfully delivered to the trip destination. The default value is <code class="code-example-body prettyprint">false</code></li>
+		</ul>
+		<p>Checking the status of a specific order is just a simple <a>GET</a> request to the following url:</p>
+		<pre class="code-example"><code class="code-example-body prettyprint">https://lady-delivery.firebaseio.com/order/{order_id}/status.json</code></pre></br>
+		<p>If the <code class="code-example-body prettyprint">order_id</code> is valid, this action will give you the following result in JSON format:</p>
+		<!-- CODE EXAMPLE ———————————————————————————————————————— -->
+		<pre class="code-example">
+		<code class="code-example-body prettyprint">
+{
+  delivered: {
+    active: false,
+    time: ""
+  },
+  picked: {
+    active: false,
+    time: ""
+  },
+  posted: {
+    active: true,
+    time: "17:14" // timestamp when status is true
+  }
+}
+		</code>
+		</pre>
+		<!-- ————————————————————————————————————————————————————— -->
+
 	</div>
 
 	<div id="updateOrder" class="docs-section">
 		<h6 class="docs-header">Update delivery details</h6>
-		<p>The LadyJek Delivery API Sandbox is for you to test the functionality of your application without making legitimate calls to our main delivery platform. All request to the sandbox API endpoints will be ephemeral.</p>
-		<p>The requests to the sandbox environment can be sent to this url:</p>
-		<pre class="code-example"><code class="code-example-body prettyprint">https://lady-delivery-sandbox.firebaseio.com/order.json</code></pre>
+		<p>The function to update details of an order is still currently <strong>under development.</strong></p>
+		<ul>
+			<li>Please contact our customer service directly to change the information by providing your name, company name, and <code class="code-example-body prettyprint">order_id</code>.</li>
+			<li>You can only change delivery details when the item has not yet been picked-up by a LadyJek Biker.</li>
+			<li>When an order is picked-up, the trip will be billed in full.</li>
+		</ul>
 	</div>
 
 	<div id="cancelOrder" class="docs-section">
 		<h6 class="docs-header">Cancel an order</h6>
-		<p>The LadyJek Delivery API Sandbox is for you to test the functionality of your application without making legitimate calls to our main delivery platform. All request to the sandbox API endpoints will be ephemeral.</p>
-		<p>The requests to the sandbox environment can be sent to this url:</p>
-		<pre class="code-example"><code class="code-example-body prettyprint">https://lady-delivery-sandbox.firebaseio.com/order.json</code></pre>
+		<p>The function to cancel an order is still currently <strong>under development.</strong></p>
+		<ul>
+			<li>Please contact our customer service directly to cancel an order by providing your name, company name, and <code class="code-example-body prettyprint">order_id</code>.</li>
+			<li>Since the delivery process will immediately begin when an order is posted, order cancellation will be free-of-charge for 10 minutes after the posted time.</li>
+			<li>After 10 minutes, there will be a cancellation fee of half of the total trip value.</li>
+			<li>When an order is picked-up, the trip will be billed in full.</li>
+		</ul>
 	</div>
 
 </div>
