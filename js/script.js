@@ -43,6 +43,29 @@ angularApp.controller("mainController", function($scope, $firebaseObject){
 
 });
 
+/* LOGIN
+
+firebase.auth().onAuthStateChanged(function(user) {
+	if (user) {
+		// User is signed in
+	} else {
+		// No user is signed in
+	}
+});
+
+var user = firebase.auth().currentUser;
+var name, email, uid;
+
+if (user != null) {
+	name = user.displayName;
+	email = user.email;
+	uid = user.uid;
+}
+
+var newPassword
+
+*/
+
 /* "order": {
       "$singleOrder": {
         ".write": "newData.child('client_id').val() == 'EawDasGgVcMWh4s4GCeiItmIVtU2'"
