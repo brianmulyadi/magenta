@@ -60,16 +60,16 @@ initApp = function() {
       };
 
       window.onload = function() {
-        initApp()
+        initApp();
 
         signOut = function() {
-  firebase.auth().signOut().then(function() {
-  // Sign-out successful.
-  }, function(error) {
-  // An error happened.
-  });
-};
+        firebase.auth().signOut().then(function() {
+        // Sign-out successful.
+        }, function(error) {
+        // An error happened.
+        });
+      };
 
-var outButton = document.getElementById('sign-out');
-outButton.addEventListener("click", signOut);
+      var outButton = document.getElementById('sign-out');
+      outButton.addEventListener("click", signOut);
       };
