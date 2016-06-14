@@ -34,21 +34,23 @@
 
     <script src="https://www.gstatic.com/firebasejs/3.0.3/firebase.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
-    <script src="js/addOrder.js"></script>
     
-    <script src="js/moment.js"></script>
     
 
     <!-- Angular Fire Let's Go FIYAH -->
     <!-- AngularJS -->
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular-resource.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular-route.js"></script>
 
 
 	<!-- AngularFire -->
 	<script src="https://cdn.firebase.com/libs/angularfire/2.0.0/angularfire.min.js"></script>
 
 	<script src="js/script.js"></script>
+	<script src="js/addOrder.js"></script>
+    
+    <script src="js/moment.js"></script>
 
     <!-- Stylesheets -->
     <link rel="stylesheet" href="css/style.css">
@@ -57,23 +59,39 @@
 
 <!-- Primary Page Layout
 –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-<div class="container" style="max-width: 1400px" ng-app="ladyDeliveryApp" ng-controller="mainController">
+<div class="container" style="max-width: 1400px">
 <div class="row">
   <div class="eight columns" style="margin-top: 10%">
-    <h4>Delivery Dashboard</h4>
-    <p>Lady Delivery order management system. Check out the <a href="http://www.getskeleton.com">API Documentation</a>.</p>
+    <h2>LadyJek Delivery</h2>
+    <p>Sign in to access your dashboard or check out our <a href="pages/docs.html">API Documentation</a> to include it in your app.</p>
+    <p id="timestamp">last updated at: </p>
   </div>
   <div class="four columns" style="margin-top: 10%; text-align:right">
-    <p id="timestamp">last updated at</br></p>
+  	<div id="quickstart-sign-in-status"></div></br>
+    <button id="loginButton"></button>
   </div>
 </div>
 
 <div class="row">
+	<nav class="navbar">
+			<ul class="navbar-list" id="navBar">
+				<li class="navbar-item"><a href="#" class="navbar-link">Home</a></li>
+				<!-- <li class="navbar-item"><a href="#dashboard" class="navbar-link">Dashboard</a></li> -->
+				<li class="navbar-item"><a href="#order-form" class="navbar-link">Order Form</a></li>
+			</ul>
+	</nav>
+</div>
+
+<div ng-app="ladyDeliveryApp" ng-controller="mainController">
+
+<div class="row">
 <div id="quickstart-sign-in-status"></div>
     <div id="quickstart-sign-in"></div>
-    <div id="quickstart-account-details"></div>
-    <button id="sign-out">Sign Out</button>
+    <!--<div id="quickstart-account-details"></div>-->
+    
 </div>
+
+<div ng-view></div>
 <!--
 <div class="row" ng-repeat="pushID in order">
               
@@ -87,7 +105,7 @@
         </label>
       </div>
 </div>-->
-
+<!--
 <div class="row">
 	<table class="u-full-width">
 		<thead>
@@ -124,8 +142,8 @@
 			</tr>
 		</tbody>
 	</table>
+</div> -->
 </div>
-
 </div>
 
 <!-- End Document

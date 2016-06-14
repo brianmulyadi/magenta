@@ -10,7 +10,7 @@ var uiConfig = {
   'queryParameterForWidgetMode': 'mode',
   // Query parameter name for sign in success url.
   'queryParameterForSignInSuccessUrl': 'signInSuccessUrl',
-  'signInSuccessUrl': 'http://localhost:8888/logged-in.html',
+  'signInSuccessUrl': 'http://localhost:8888',
   'signInOptions': [
     firebase.auth.EmailAuthProvider.PROVIDER_ID
   ],

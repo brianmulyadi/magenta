@@ -40,7 +40,7 @@ $(document).ready(function(){
     var $toAddress = $('#toAddress');
     var $itemDesc = $('#itemDesc');
     var $addOrder = $('#add-order');
-    var $clientId = "awDasGgVcMWh4s4GCeiItmIVtU2";
+    var $clientId = "EawDasGgVcMWh4s4GCeiItmIVtU2";
 
     var newOrder = {
         "client_id": $clientId,
