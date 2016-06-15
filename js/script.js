@@ -35,7 +35,7 @@ var uiConfig = {
   'queryParameterForWidgetMode': 'mode',
   // Query parameter name for sign in success url.
   'queryParameterForSignInSuccessUrl': 'signInSuccessUrl',
-  'signInSuccessUrl': 'http://localhost:8888/pages/logged-in.html',
+  'signInSuccessUrl': 'http://localhost:8888',
   'signInOptions': [
     firebase.auth.EmailAuthProvider.PROVIDER_ID
   ],
@@ -60,13 +60,15 @@ initApp = function() {
 	  if (user) {
 	    // User is signed in.
 	    var displayName = user.displayName;
+	    var nameArray = displayName.split(' ');
+	    var firstName = nameArray[0];
 	    var email = user.email;
 	    var emailVerified = user.emailVerified;
 	    var photoURL = user.photoURL;
 	    var uid = user.uid;
 	    var providerData = user.providerData;
 	    user.getToken().then(function(accessToken) {
-	      document.getElementById('quickstart-sign-in-status').textContent = 'Signed in';
+	      document.getElementById('quickstart-sign-in-status').textContent = 'Welcome, ' + firstName;
 	      document.getElementById('loginButton').textContent = 'Sign out';
 	      document.getElementById('loginButton').addEventListener("click", signOut);
 
@@ -76,8 +78,18 @@ initApp = function() {
 	      a.innerText = 'dashboard';
 	      a.className = 'navbar-link';
 	      a.href = '#dashboard';
+	      var b = document.createElement('a');
+	      b.innerText = 'update';
+	      b.className = 'navbar-link';
+	      b.href = '#update';
+	      var c = document.createElement('a');
+	      c.innerText = 'cancel';
+	      c.className = 'navbar-link';
+	      c.href = '#delete';
 	      li.className = 'navbar-item';
 	      li.appendChild(a);
+	      li.appendChild(b);
+	      li.appendChild(c);
 	      navBar.appendChild(li);
 
 	      document.getElementById('quickstart-account-details').textContent = JSON.stringify({
@@ -92,7 +104,7 @@ initApp = function() {
 	    });
 	  } else {
 	    // User is signed out.
-	    document.getElementById('quickstart-sign-in-status').textContent = 'Signed out';
+	    document.getElementById('quickstart-sign-in-status').textContent = 'Sign in to access your dashboard';
 	    document.getElementById('loginButton').textContent = 'Sign in';
 	    document.getElementById('loginButton').addEventListener("click", signIn);
 	    // document.getElementById('quickstart-account-details').textContent = 'null';
@@ -159,6 +171,26 @@ angularApp.config(function($routeProvider) {
 		    }
 		})
 
+		.when('/update', {
+			templateUrl : 'pages/update.html',
+			controller: 'updateController',
+			resolve: {
+		      "currentAuth": ["Auth", function(Auth) {
+	        return Auth.$requireSignIn();
+		      }]
+		    }
+		})
+
+		.when('/delete', {
+			templateUrl : 'pages/delete.html',
+			controller: 'deleteController',
+			resolve: {
+		      "currentAuth": ["Auth", function(Auth) {
+	        return Auth.$requireSignIn();
+		      }]
+		    }
+		})
+
 		.when('/order-form', {
 			templateUrl : 'pages/order.html',
 			controller: 'orderController',
@@ -203,6 +235,36 @@ angular.module('ladyDeliveryApp').controller('orderController', function($scope)
         var script = document.createElement('script');
         script.type = 'text/javascript';
         script.src = 'js/addOrder.js';
+        document.body.appendChild(script);
+    }
+
+    $scope.$on('$viewContentLoaded', function () {
+        loadScript();
+    });
+});
+
+angular.module('ladyDeliveryApp').controller('updateController', function($scope) {
+    // create a message to display in our view
+    // $ocLazyLoad.load('js/addOrder.js');
+    var loadScript = function () {
+        var script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.src = 'js/updateOrder.js';
+        document.body.appendChild(script);
+    }
+
+    $scope.$on('$viewContentLoaded', function () {
+        loadScript();
+    });
+});
+
+angular.module('ladyDeliveryApp').controller('deleteController', function($scope) {
+    // create a message to display in our view
+    // $ocLazyLoad.load('js/addOrder.js');
+    var loadScript = function () {
+        var script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.src = 'js/deleteOrder.js';
         document.body.appendChild(script);
     }
 

@@ -1,4 +1,4 @@
-var formatTime = function(time) {
+nvar formatTime = function(time) {
     var hours = time.getHours();
     var minutes = time.getMinutes();
 
@@ -61,8 +61,10 @@ $(document).ready(function(){
     var $toAddress = $('#toAddress');
     var $itemDesc = $('#itemDesc');
     var $addOrder = $('#add-order');
+    var $clientId = "EawDasGgVcMWh4s4GCeiItmIVtU2";
 
     var newOrder = {
+        "auth": accessTokenGot,
         "order_id": $.now(),
         "date": $formatDate,
         "from": {
@@ -93,7 +95,7 @@ $(document).ready(function(){
     };
 
     $.ajax({
-        type: 'POST',
+        type: 'PATCH',
         url: 'https://lady-delivery.firebaseio.com/order.json?auth='+accessTokenGot,
         contentType: "application/json; charset=utf-8",
         data: JSON.stringify(newOrder),
