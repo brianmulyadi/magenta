@@ -115,7 +115,7 @@ initApp = function() {
 };
 
 // create our angular module and inject firebase
-var angularApp = angular.module('ladyDeliveryApp', ['firebase', 'ngRoute']);
+var angularApp = angular.module('ladyDeliveryApp', ['firebase', 'ngRoute', 'ngAnimate']);
 
 /*
 angularApp.factory("Auth", function($firebaseAuth) {
@@ -241,6 +241,7 @@ angular.module('ladyDeliveryApp').controller('orderController', function($scope)
     $scope.$on('$viewContentLoaded', function () {
         loadScript();
     });
+
 });
 
 angular.module('ladyDeliveryApp').controller('updateController', function($scope) {
@@ -256,6 +257,7 @@ angular.module('ladyDeliveryApp').controller('updateController', function($scope
     $scope.$on('$viewContentLoaded', function () {
         loadScript();
     });
+
 });
 
 angular.module('ladyDeliveryApp').controller('deleteController', function($scope) {
@@ -271,6 +273,7 @@ angular.module('ladyDeliveryApp').controller('deleteController', function($scope
     $scope.$on('$viewContentLoaded', function () {
         loadScript();
     });
+
 });
 
 /* LOGIN
