@@ -99,6 +99,7 @@ $(document).ready(function(){
         data: JSON.stringify(newOrder),
         success: function(data) {
             console.log("Order added!", data);
+            console.log(auth.uid);
         },
         error: function (jqXHR) {
             if (jqXHR.status == 401) {

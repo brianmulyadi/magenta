@@ -50,6 +50,9 @@ var database = app.database();
 var auth = app.auth();
 var storage = app.storage();
 
+
+
+
 //Firebase UI auth
 var ui = new firebaseui.auth.AuthUI(auth);
 // The start method will wait until the DOM is loaded.
@@ -209,6 +212,7 @@ angularApp.config(function($routeProvider) {
 angularApp.controller('mainController', function($scope) {
     // create a message to display in our view
     $scope.message = 'Hi there! Thank you for using LadyJek Delivery';
+
 });
 
 
@@ -218,30 +222,178 @@ angularApp.controller("dashController", function($scope, $firebaseObject){
 	// var ref = firebase.database().ref();
 	// $scope.data = $firebaseObject(ref);
 
-	var ref = firebase.database().ref().child('order');
+	
 
-	// sync as object
-	var syncObject = $firebaseObject(ref);
+	var user = firebase.auth().currentUser;
+	var name, email, photoUrl, uid;
 
-	// three way data binding
-	syncObject.$bindTo($scope, 'order');
+	if (user != null) {
+	  name = user.displayName;
+	  email = user.email;
+	  photoUrl = user.photoURL;
+	  uid = user.uid;  // The user's ID, unique to the Firebase project. Do NOT use
+	                   // this value to authenticate with your backend server, if
+	                   // you have one. Use User.getToken() instead.
+	  console.log(name);
+	  console.log(email);
+	  console.log(photoUrl);
+	  console.log(uid);
+
+	  var ref = firebase.database().ref().child(uid).child('order');
+
+		// sync as object
+		var syncObject = $firebaseObject(ref);
+
+		// three way data binding
+		syncObject.$bindTo($scope, 'order');
+
+	}
 
 });
 
 angular.module('ladyDeliveryApp').controller('orderController', function($scope) {
     // create a message to display in our view
     // $ocLazyLoad.load('js/addOrder.js');
-    var loadScript = function () {
-        var script = document.createElement('script');
-        script.type = 'text/javascript';
-        script.src = 'js/addOrder.js';
-        document.body.appendChild(script);
-    }
 
-    $scope.$on('$viewContentLoaded', function () {
-        loadScript();
-    });
+    var user = firebase.auth().currentUser;
+		var name, email, photoUrl, uid;
 
+		if (user != null) {
+		  name = user.displayName;
+		  email = user.email;
+		  photoUrl = user.photoURL;
+		  uid = user.uid;  // The user's ID, unique to the Firebase project. Do NOT use
+		                   // this value to authenticate with your backend server, if
+		                   // you have one. Use User.getToken() instead.
+		  console.log(name);
+		  console.log(email);
+		  console.log(photoUrl);
+		  console.log(uid);
+		}
+
+    var formatTime = function(time) {
+    var hours = time.getHours();
+    var minutes = time.getMinutes();
+
+    if (hours < 10)
+        hours = '0' + hours;
+
+    if (minutes < 10)
+        minutes = '0' + minutes;
+
+    return hours + ":" + minutes;
+		}
+
+		var formatDate = function(time) {
+		    var day = time.getDate();
+		    var month = time.getMonth() + 1;
+
+		    if (day < 10)
+		        day = '0' + day;
+
+		    if (month < 10)
+		        month = '0' + month;
+
+		    return day + "/" + month;
+		}
+
+		$(document).ready(function(){
+		    var auth = app.auth();
+
+		    var accessTokenGot;
+
+		    getAccessToken = function() {
+		        auth.onAuthStateChanged(function(user) {
+		            if (user) {
+		                user.getToken().then(function(accessToken) {
+		                    console.log('Access Token: ' + accessToken);
+		                    accessTokenGot = accessToken;
+		                });
+		            } else {
+		                console.log('User is not signed in');
+		            }
+		            }, function(error) {
+		                console.log(error);
+		        });
+		    };
+
+		    getAccessToken();
+
+		    var $postedTime = new Date();
+		    var $formatTime = formatTime($postedTime);
+		    var $formatDate = formatDate($postedTime);
+
+		    $('form').on('submit', function(e) {
+		    e.preventDefault();  
+
+		    var $fromName = $('#fromName');
+		    var $fromContactNo = $('#fromContactNo');
+		    var $fromAddress = $('#fromAddress');
+		    var $toName = $('#toName');
+		    var $toContactNo = $('#toContactNo');
+		    var $toAddress = $('#toAddress');
+		    var $itemDesc = $('#itemDesc');
+		    var $addOrder = $('#add-order');
+
+		    var newOrder = {
+		        "order_id": $.now(),
+		        "date": $formatDate,
+		        "from": {
+		            "name": $fromName.val(),
+		            "phone_no": $fromContactNo.val(),
+		            "address": $fromAddress.val(),
+		        },
+		        "to": {
+		            "name": $toName.val(),
+		            "phone_no": $toContactNo.val(),
+		            "address": $toAddress.val(),
+		        },
+		        "item": $itemDesc.val(),
+		        "status": {
+		            "posted": {
+		                "active": true,
+		                "time": $formatTime,
+		            },
+		            "picked": {
+		                "active": false,
+		                "time": "",
+		            },
+		            "delivered": {
+		                "active": false,
+		                "time": "",
+		            },
+		        },
+		    };
+
+		    $.ajax({
+		        type: 'POST',
+		        url: 'https://lady-delivery.firebaseio.com/'+uid+'/order.json?auth='+accessTokenGot,
+		        contentType: "application/json; charset=utf-8",
+		        data: JSON.stringify(newOrder),
+		        success: function(data) {
+		            console.log("Order added!", data);
+		            console.log(uid);
+		        },
+		        error: function (jqXHR) {
+		            if (jqXHR.status == 401) {
+		                alert("401: Authentication Error!");
+		            } else if (jqXHR.status == 400) {
+		                alert("400: Invalid data format in input");
+		            };
+		        }
+		    });
+
+		    $.ajax({
+		        type: 'POST',
+		        url: 'https://hooks.zapier.com/hooks/catch/1402225/upcokh/',
+		        contentType: "application/json; charset=utf-8",
+		        data: JSON.stringify(newOrder),
+		        success: function(data) {
+		            console.log("Order added!", data);
+		        },
+		    });
+		});
+		});
 });
 
 angular.module('ladyDeliveryApp').controller('updateController', function($scope) {
