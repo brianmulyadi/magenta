@@ -227,6 +227,28 @@ angularApp.controller("dashController", function($scope, $firebaseObject){
 	var user = firebase.auth().currentUser;
 	var name, email, photoUrl, uid;
 
+	var auth = app.auth();
+
+	    var accessTokenGot;
+
+	    getAccessToken = function() {
+	        auth.onAuthStateChanged(function(user) {
+	            if (user) {
+	                user.getToken().then(function(accessToken) {
+	                    console.log('Access Token: ' + accessToken);
+	                    accessTokenGot = accessToken;
+	                });
+	            } else {
+	                console.log('User is not signed in');
+	            }
+	            }, function(error) {
+	                console.log(error);
+	        });
+	    };
+
+	    getAccessToken();
+	    console.log(accessTokenGot);
+
 	if (user != null) {
 	  name = user.displayName;
 	  email = user.email;
@@ -241,13 +263,84 @@ angularApp.controller("dashController", function($scope, $firebaseObject){
 
 	  var ref = firebase.database().ref().child(uid).child('order');
 
+	  ref.on('child_changed', function(snapshot) {
+		var chat = snapshot.val();
+		console.log("HERE: " + chat.order_id);
+		//console.log(chat.order_id.ref());
+		});
+
 		// sync as object
 		var syncObject = $firebaseObject(ref);
 
 		// three way data binding
 		syncObject.$bindTo($scope, 'order');
 
-	}
+		// timestamp on value change
+/*
+		var deliveredRef = firebase.database().ref().child(uid).child('order').child('status').child('delivered').child('active');
+		deliveredRef.on('value', function(snapshot) {
+		var chat = snapshot.val();
+		addMessage(chat);
+		});*/
+
+	};
+
+
+
+	var pickedRef = firebase.database().ref().child(uid).child('order').child('-KKNi2N0VJ4WFleqqHPK').child('status/picked/active');
+	pickedRef.on('value', function(snapshot) {
+		console.log(snapshot.val());
+		if (snapshot.val() == true) {
+			var formatTime = function(time) {
+    var hours = time.getHours();
+    var minutes = time.getMinutes();
+
+    if (hours < 10)
+        hours = '0' + hours;
+
+    if (minutes < 10)
+        minutes = '0' + minutes;
+
+    return hours + ":" + minutes;
+		}
+
+		var $postedTime = new Date();
+	  var $formatTime = formatTime($postedTime);
+
+	  var newTime = {
+	  	"time": $formatTime
+	  };
+		$.ajax({
+		        type: 'PATCH',
+		        url: 'https://lady-delivery.firebaseio.com/'+uid+'/order/-KKNi2N0VJ4WFleqqHPK/status/picked.json?auth='+accessTokenGot,
+		        contentType: "application/json; charset=utf-8",
+		        data: JSON.stringify(newTime),
+		        success: function(data) {
+		            console.log("Time updated!", data);
+		            console.log(uid);
+		        },
+		        error: function (jqXHR) {
+		            if (jqXHR.status == 401) {
+		                alert("401: Authentication Error!");
+		            } else if (jqXHR.status == 400) {
+		                alert("400: Invalid data format in input");
+		            };
+		        }
+		    });
+		}
+	});
+
+	/*
+	var totalAmount;
+	ref.once("value", function(snapshot) {
+		var totalAmount = snapshot.numChildren();
+		console.log("Total amount: " + totalAmount);
+		for (i = 0; i < totalAmount; i++ ) {
+			var x = angular.element('#orderTimeId-0').val();
+			console.log(x);
+		};
+	});	
+	*/
 
 });
 

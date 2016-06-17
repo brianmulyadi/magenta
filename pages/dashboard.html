@@ -29,7 +29,7 @@
 		</thead>
 		<tbody id="orderList">
 			<tr ng-repeat="(pushID, pushObj) in order">
-				<td style="max-width: 100px; word-wrap: break-word">{{ pushID.replace('-','') }}</td>
+				<td style="max-width: 100px; word-wrap: break-word">{{ pushID.replace('-','') }}<p style="display:block" id="orderTimeId-{{ $index  }}">{{ pushObj.order_id }}</p></td>
 				<td style="max-width: 150px">
 					<p><strong>{{ pushObj.from.name }}</strong></p>
 					<p>{{ pushObj.from.phone_no }}</p>

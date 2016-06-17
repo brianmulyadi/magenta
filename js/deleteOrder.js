@@ -1,4 +1,21 @@
 $(document).ready(function(){
+
+    var user = firebase.auth().currentUser;
+    var name, email, photoUrl, uid;
+
+    if (user != null) {
+      name = user.displayName;
+      email = user.email;
+      photoUrl = user.photoURL;
+      uid = user.uid;  // The user's ID, unique to the Firebase project. Do NOT use
+                       // this value to authenticate with your backend server, if
+                       // you have one. Use User.getToken() instead.
+      console.log(name);
+      console.log(email);
+      console.log(photoUrl);
+      console.log(uid);
+    };
+
     var auth = app.auth();
 
     var accessTokenGot;
@@ -29,7 +46,7 @@ $(document).ready(function(){
     if (order_id == '') {
         alert('Cannot leave it blank!');
     } else {
-        var databaseRef = database.ref().child('order');
+        var databaseRef = database.ref().child('Pe1QxeawXbYy92a2XhISV9TXMZo2').child('order');
         databaseRef.once("value", function(snapshot) {
             var x = snapshot.child(order_id).exists();
             console.log('x is: ' + x);
@@ -37,7 +54,7 @@ $(document).ready(function(){
             if (confirm('Are you sure you want to delete the order?')) {
             $.ajax({
                 type: 'DELETE',
-                url: 'https://lady-delivery.firebaseio.com/order/'+order_id+'.json?auth='+accessTokenGot,
+                url: 'https://lady-delivery.firebaseio.com/Pe1QxeawXbYy92a2XhISV9TXMZo2/order/'+order_id+'.json?auth='+accessTokenGot,
                 contentType: "application/json; charset=utf-8",
                 success: function(data) {
                     console.log("Order deleted!", data);
