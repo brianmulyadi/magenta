@@ -29,7 +29,7 @@
 		</thead>
 		<tbody id="orderList">
 			<tr ng-repeat="(pushID, pushObj) in order">
-				<td style="max-width: 100px; word-wrap: break-word">{{ pushID.replace('-','') }}<p style="display:block" id="orderTimeId-{{ $index  }}">{{ pushObj.order_id }}</p></td>
+				<td style="max-width: 100px; word-wrap: break-word">{{ pushID.replace('-','') }}<p style="display:none" id="orderTimeId-{{ $index  }}">{{ pushObj.order_id }}</p></td>
 				<td style="max-width: 150px">
 					<p><strong>{{ pushObj.from.name }}</strong></p>
 					<p>{{ pushObj.from.phone_no }}</p>
@@ -43,11 +43,11 @@
 				<td style="max-width: 100px">{{ pushObj.item }}</td>
 				<td class="status-checkbox">
 					<input type="checkbox" id="{{ pushObj.order_id }}-0"  ng-model="pushObj.status.posted.active">
-					<label for="{{ pushObj.order_id }}-0">Posted</label>
+					<label for="{{ pushObj.order_id }}-0">Posted | {{ pushObj.status.posted.time }}</label>
 					<input type="checkbox" id="{{ pushObj.order_id }}-1"  ng-model="pushObj.status.picked.active">
-					<label for="{{ pushObj.order_id }}-1">Picked-Up</label>
+					<label for="{{ pushObj.order_id }}-1">Picked-Up | {{ pushObj.status.picked.time }}</label>
 					<input type="checkbox" id="{{ pushObj.order_id }}-2"  ng-model="pushObj.status.delivered.active">
-					<label for="{{ pushObj.order_id }}-2">Delivered</label>
+					<label for="{{ pushObj.order_id }}-2">Delivered | {{ pushObj.status.delivered.time }}</label>
 				</td>
 			</tr>
 		</tbody>

@@ -273,31 +273,55 @@ angularApp.controller("dashController", function($scope, $firebaseObject){
 			console.log(snapshot.val());
 			if (snapshot.val() == true) {
 				var formatTime = function(time) {
-	    var hours = time.getHours();
-	    var minutes = time.getMinutes();
+		    var hours = time.getHours();
+		    var minutes = time.getMinutes();
 
-	    if (hours < 10)
-	        hours = '0' + hours;
+		    if (hours < 10)
+		        hours = '0' + hours;
 
-	    if (minutes < 10)
-	        minutes = '0' + minutes;
+		    if (minutes < 10)
+		        minutes = '0' + minutes;
 
-	    return hours + ":" + minutes;
-			}
+		    return hours + ":" + minutes;
+				}
 
-			var $postedTime = new Date();
-		  var $formatTime = formatTime($postedTime);
+				var $pickedTime = new Date();
+			  var $formatTime = formatTime($pickedTime);
 
-		  var newTime = {
-		  	"time": $formatTime
-		  };
-			$.ajax({
+			  var newTime = {
+			  	"time": $formatTime
+			  };
+
+				$.ajax({
+				        type: 'PATCH',
+				        url: 'https://lady-delivery.firebaseio.com/'+uid+'/order/'+orderTimeId+'/status/picked.json?auth='+accessTokenGot,
+				        contentType: "application/json; charset=utf-8",
+				        data: JSON.stringify(newTime),
+				        success: function(data) {
+				            console.log("Time updated!", data);
+				            console.log(uid);
+				        },
+				        error: function (jqXHR) {
+				            if (jqXHR.status == 401) {
+				                alert("401: Authentication Error!");
+				            } else if (jqXHR.status == 400) {
+				                alert("400: Invalid data format in input");
+				            };
+				        }
+				    });
+			} else if (snapshot.val() == false) {
+
+				var resetTime = {
+			  	"time": ""
+			  };
+
+					$.ajax({
 			        type: 'PATCH',
 			        url: 'https://lady-delivery.firebaseio.com/'+uid+'/order/'+orderTimeId+'/status/picked.json?auth='+accessTokenGot,
 			        contentType: "application/json; charset=utf-8",
-			        data: JSON.stringify(newTime),
+			        data: JSON.stringify(resetTime),
 			        success: function(data) {
-			            console.log("Time updated!", data);
+			            console.log("Time reset!", data);
 			            console.log(uid);
 			        },
 			        error: function (jqXHR) {
@@ -309,7 +333,75 @@ angularApp.controller("dashController", function($scope, $firebaseObject){
 			        }
 			    });
 			}
-		});
+			});
+
+			// timestamp on value change
+			var deliveredRef = firebase.database().ref().child(uid).child('order/'+orderTimeId+'/status/delivered/active');
+			deliveredRef.once('value', function(snapshot) {
+			console.log(snapshot.val());
+			if (snapshot.val() == true) {
+				var formatTime = function(time) {
+		    var hours = time.getHours();
+		    var minutes = time.getMinutes();
+
+		    if (hours < 10)
+		        hours = '0' + hours;
+
+		    if (minutes < 10)
+		        minutes = '0' + minutes;
+
+		    return hours + ":" + minutes;
+				}
+
+				var $deliveredTime = new Date();
+			  var $formatTime = formatTime($deliveredTime);
+
+			  var newTime = {
+			  	"time": $formatTime
+			  };
+
+				$.ajax({
+				        type: 'PATCH',
+				        url: 'https://lady-delivery.firebaseio.com/'+uid+'/order/'+orderTimeId+'/status/delivered.json?auth='+accessTokenGot,
+				        contentType: "application/json; charset=utf-8",
+				        data: JSON.stringify(newTime),
+				        success: function(data) {
+				            console.log("Time updated!", data);
+				            console.log(uid);
+				        },
+				        error: function (jqXHR) {
+				            if (jqXHR.status == 401) {
+				                alert("401: Authentication Error!");
+				            } else if (jqXHR.status == 400) {
+				                alert("400: Invalid data format in input");
+				            };
+				        }
+				    });
+			} else if (snapshot.val() == false) {
+
+				var resetTime = {
+			  	"time": ""
+			  };
+
+					$.ajax({
+			        type: 'PATCH',
+			        url: 'https://lady-delivery.firebaseio.com/'+uid+'/order/'+orderTimeId+'/status/delivered.json?auth='+accessTokenGot,
+			        contentType: "application/json; charset=utf-8",
+			        data: JSON.stringify(resetTime),
+			        success: function(data) {
+			            console.log("Time reset!", data);
+			            console.log(uid);
+			        },
+			        error: function (jqXHR) {
+			            if (jqXHR.status == 401) {
+			                alert("401: Authentication Error!");
+			            } else if (jqXHR.status == 400) {
+			                alert("400: Invalid data format in input");
+			            };
+			        }
+			    });
+			}
+			});
 
 		});
 
