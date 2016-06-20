@@ -1,6 +1,6 @@
 <!-- Primary Page Layout
 –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-<div ng-app="ladyDeliveryApp" ng-controller="dashController">
+<div ng-app="ladyDeliveryApp" ng-controller="dashController" ng-init="init()">
 
 <!--
 <div class="row" ng-repeat="pushID in order">
@@ -36,7 +36,7 @@
 					<p>{{ pushObj.from.address }}</p>
 				</td>
 				<td style="max-width: 150px">
-					<p><strong>{{ pushObj.to.name }}</strong></p>
+					<p id="nomanoma"><strong>{{ pushObj.to.name }}</strong></p>
 					<p>{{ pushObj.to.phone_no }}</p>
 					<p>{{ pushObj.to.address }}</p>
 				</td>
@@ -52,6 +52,9 @@
 			</tr>
 		</tbody>
 	</table>
+	<button class="prev"><< &nbsp Previous</button>
+	<button class="next" style="float:right">Next &nbsp >></button>
+	<p style="text-align: center">Page <span class="currentPage"></span> of <span class="totalPage"></span></p>
 </div>
 
 </div>

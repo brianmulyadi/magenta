@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', function() {
 	latestUpdate.innerText = moment().format('ll');
 	timestamp.appendChild(latestUpdate);
 
+
+
 	initApp();
 
 	signOut = function() {
@@ -216,100 +218,124 @@ angularApp.controller('mainController', function($scope) {
 });
 
 
-angularApp.controller("dashController", function($scope, $firebaseObject){
+angularApp.controller("dashController", function($scope, $firebaseObject, $timeout, $http){
 
 	// connect to Firebase
 	// var ref = firebase.database().ref();
 	// $scope.data = $firebaseObject(ref);
 
-	
-
 	var user = firebase.auth().currentUser;
-	var name, email, photoUrl, uid, orderTimeId;
-
+	var name, email, uid, orderTimeId;
 	var auth = app.auth();
 
-	    var accessTokenGot;
+  var accessTokenGot;
 
-	    getAccessToken = function() {
-	        auth.onAuthStateChanged(function(user) {
-	            if (user) {
-	                user.getToken().then(function(accessToken) {
-	                    console.log('Access Token: ' + accessToken);
-	                    accessTokenGot = accessToken;
-	                });
-	            } else {
-	                console.log('User is not signed in');
-	            }
-	            }, function(error) {
-	                console.log(error);
-	        });
-	    };
+  getAccessToken = function() {
+      auth.onAuthStateChanged(function(user) {
+          if (user) {
+              user.getToken().then(function(accessToken) {
+                  console.log('Access Token: ' + accessToken);
+                  accessTokenGot = accessToken;
+              });
+          } else {
+              console.log('User is not signed in');
+          }
+          }, function(error) {
+              console.log(error);
+      });
+  };
 
-	    getAccessToken();
-	    console.log(accessTokenGot);
+  getAccessToken();
+  // console.log(accessTokenGot);
 
 	if (user != null) {
 	  name = user.displayName;
 	  email = user.email;
-	  photoUrl = user.photoURL;
-	  uid = user.uid;  // The user's ID, unique to the Firebase project. Do NOT use
-	                   // this value to authenticate with your backend server, if
-	                   // you have one. Use User.getToken() instead.
+	  uid = user.uid;
+
 	  console.log(name);
 	  console.log(email);
-	  console.log(photoUrl);
 	  console.log(uid);
 
 	  var ref = firebase.database().ref().child(uid).child('order');
 
+	  // sync as object
+		var syncObject = $firebaseObject(ref);
+
+		// three way data binding
+		syncObject.$bindTo($scope, 'order');
+
+		/*
+		$scope.tasks = [];
+ 
+	  $scope.init = function () {
+	    $scope.loading = true;
+
+	    // sync as object
+			var syncObject = $firebaseObject(ref);
+
+			// three way data binding
+			syncObject.$bindTo($scope, 'order');
+		  $scope.$broadcast('dataloaded');
+
+	  };
+	 
+		$scope.init();
+
+		$scope.$on('dataloaded', function () {
+			$timeout(function () { 
+          $("#nomanoma").text("BRAHBRAH");
+        }, 0, false);
+		});
+		*/
+
 	  ref.on('child_changed', function(snapshot) {		
-		var orderTimeId = snapshot.key;
-		console.log(orderTimeId);
+			var orderTimeId = snapshot.key;
+			console.log(orderTimeId);
 
 			// timestamp on value change
 			var pickedRef = firebase.database().ref().child(uid).child('order/'+orderTimeId+'/status/picked/active');
 			pickedRef.once('value', function(snapshot) {
-			console.log(snapshot.val());
-			if (snapshot.val() == true) {
-				var formatTime = function(time) {
-		    var hours = time.getHours();
-		    var minutes = time.getMinutes();
+				console.log(snapshot.val());
+				if (snapshot.val() == true) {
+					var formatTime = function(time) {
+				    var hours = time.getHours();
+				    var minutes = time.getMinutes();
 
-		    if (hours < 10)
-		        hours = '0' + hours;
+				    if (hours < 10)
+				        hours = '0' + hours;
 
-		    if (minutes < 10)
-		        minutes = '0' + minutes;
+				    if (minutes < 10)
+				        minutes = '0' + minutes;
 
-		    return hours + ":" + minutes;
-				}
+				    return hours + ":" + minutes;
+					}
 
-				var $pickedTime = new Date();
-			  var $formatTime = formatTime($pickedTime);
+					var $pickedTime = new Date();
+				  var $formatTime = formatTime($pickedTime);
 
-			  var newTime = {
-			  	"time": $formatTime
-			  };
+				  var newTime = {
+				  	"time": $formatTime
+				  };
 
-				$.ajax({
-				        type: 'PATCH',
-				        url: 'https://lady-delivery.firebaseio.com/'+uid+'/order/'+orderTimeId+'/status/picked.json?auth='+accessTokenGot,
-				        contentType: "application/json; charset=utf-8",
-				        data: JSON.stringify(newTime),
-				        success: function(data) {
-				            console.log("Time updated!", data);
-				            console.log(uid);
-				        },
-				        error: function (jqXHR) {
-				            if (jqXHR.status == 401) {
-				                alert("401: Authentication Error!");
-				            } else if (jqXHR.status == 400) {
-				                alert("400: Invalid data format in input");
-				            };
-				        }
-				    });
-			} else if (snapshot.val() == false) {
+					$.ajax({
+		        type: 'PATCH',
+		        url: 'https://lady-delivery.firebaseio.com/'+uid+'/order/'+orderTimeId+'/status/picked.json?auth='+accessTokenGot,
+		        contentType: "application/json; charset=utf-8",
+		        data: JSON.stringify(newTime),
+		        success: function(data) {
+		            console.log("Time updated!", data);
+		            console.log(uid);
+		        },
+		        error: function (jqXHR) {
+		            if (jqXHR.status == 401) {
+		                alert("401: Authentication Error!");
+		            } else if (jqXHR.status == 400) {
+		                alert("400: Invalid data format in input");
+		            };
+		        }
+				  });
+				} else if (snapshot.val() == false) {
 
 				var resetTime = {
 			  	"time": ""
@@ -332,114 +358,156 @@ angularApp.controller("dashController", function($scope, $firebaseObject){
 			            };
 			        }
 			    });
-			}
+				}
 			});
 
 			// timestamp on value change
 			var deliveredRef = firebase.database().ref().child(uid).child('order/'+orderTimeId+'/status/delivered/active');
 			deliveredRef.once('value', function(snapshot) {
-			console.log(snapshot.val());
-			if (snapshot.val() == true) {
-				var formatTime = function(time) {
-		    var hours = time.getHours();
-		    var minutes = time.getMinutes();
+				console.log(snapshot.val());
+				if (snapshot.val() == true) {
+					var formatTime = function(time) {
+				    var hours = time.getHours();
+				    var minutes = time.getMinutes();
 
-		    if (hours < 10)
-		        hours = '0' + hours;
+				    if (hours < 10)
+				        hours = '0' + hours;
 
-		    if (minutes < 10)
-		        minutes = '0' + minutes;
+				    if (minutes < 10)
+				        minutes = '0' + minutes;
 
-		    return hours + ":" + minutes;
-				}
+				    return hours + ":" + minutes;
+					}
 
-				var $deliveredTime = new Date();
-			  var $formatTime = formatTime($deliveredTime);
+					var $deliveredTime = new Date();
+			  	var $formatTime = formatTime($deliveredTime);
 
-			  var newTime = {
-			  	"time": $formatTime
-			  };
-
-				$.ajax({
-				        type: 'PATCH',
-				        url: 'https://lady-delivery.firebaseio.com/'+uid+'/order/'+orderTimeId+'/status/delivered.json?auth='+accessTokenGot,
-				        contentType: "application/json; charset=utf-8",
-				        data: JSON.stringify(newTime),
-				        success: function(data) {
-				            console.log("Time updated!", data);
-				            console.log(uid);
-				        },
-				        error: function (jqXHR) {
-				            if (jqXHR.status == 401) {
-				                alert("401: Authentication Error!");
-				            } else if (jqXHR.status == 400) {
-				                alert("400: Invalid data format in input");
-				            };
-				        }
-				    });
-			} else if (snapshot.val() == false) {
-
-				var resetTime = {
-			  	"time": ""
-			  };
+				  var newTime = {
+				  	"time": $formatTime
+				  };
 
 					$.ajax({
-			        type: 'PATCH',
-			        url: 'https://lady-delivery.firebaseio.com/'+uid+'/order/'+orderTimeId+'/status/delivered.json?auth='+accessTokenGot,
-			        contentType: "application/json; charset=utf-8",
-			        data: JSON.stringify(resetTime),
-			        success: function(data) {
-			            console.log("Time reset!", data);
-			            console.log(uid);
-			        },
-			        error: function (jqXHR) {
-			            if (jqXHR.status == 401) {
-			                alert("401: Authentication Error!");
-			            } else if (jqXHR.status == 400) {
-			                alert("400: Invalid data format in input");
-			            };
-			        }
+		        type: 'PATCH',
+		        url: 'https://lady-delivery.firebaseio.com/'+uid+'/order/'+orderTimeId+'/status/delivered.json?auth='+accessTokenGot,
+		        contentType: "application/json; charset=utf-8",
+		        data: JSON.stringify(newTime),
+		        success: function(data) {
+		            console.log("Time updated!", data);
+		            console.log(uid);
+		        },
+		        error: function (jqXHR) {
+		            if (jqXHR.status == 401) {
+		                alert("401: Authentication Error!");
+		            } else if (jqXHR.status == 400) {
+		                alert("400: Invalid data format in input");
+		            };
+		        }
+				  });
+				} else if (snapshot.val() == false) {
+
+					var resetTime = {
+				  	"time": ""
+				  };
+
+					$.ajax({
+		        type: 'PATCH',
+		        url: 'https://lady-delivery.firebaseio.com/'+uid+'/order/'+orderTimeId+'/status/delivered.json?auth='+accessTokenGot,
+		        contentType: "application/json; charset=utf-8",
+		        data: JSON.stringify(resetTime),
+		        success: function(data) {
+		            console.log("Time reset!", data);
+		            console.log(uid);
+		        },
+		        error: function (jqXHR) {
+		            if (jqXHR.status == 401) {
+		                alert("401: Authentication Error!");
+		            } else if (jqXHR.status == 400) {
+		                alert("400: Invalid data format in input");
+		            };
+		        }
 			    });
-			}
+				}
 			});
 
 		});
 
-		// sync as object
-		var syncObject = $firebaseObject(ref);
+		$timeout(function() {
 
-		// three way data binding
-		syncObject.$bindTo($scope, 'order');
+			var page = 1;
+			var itemAmount = 10;
+			var orderLength = $("#orderList > tr").length;
+			console.log("ORDER LENGTH: " + orderLength);
 
-		
-/*
-		var deliveredRef = firebase.database().ref().child(uid).child('order').child('status').child('delivered').child('active');
-		deliveredRef.on('value', function(snapshot) {
-		var chat = snapshot.val();
-		addMessage(chat);
-		});*/
+			if (orderLength > itemAmount) {
+
+				var orderLengthMinus = orderLength - itemAmount;
+
+				$("#orderList > tr").slice(itemAmount,orderLength).hide();
+
+				for ( i = 0 ; i < orderLengthMinus; i += itemAmount) {
+					
+				  var j = i + itemAmount;
+				  var pageNumber = (i/itemAmount)+1;
+				  var num = pageNumber.toString();
+				  var pageClass = "page"+num;
+				  $("#orderList > tr").slice(i,j).addClass(pageClass);
+
+				};
+
+				var x = orderLength / itemAmount; 
+				var y = Math.floor(x);
+				var z = y  * itemAmount;
+
+				var q = y + 1;
+				var num = q.toString();
+				var pageClass = "page"+num;
+
+				$("#orderList > tr").slice(z,orderLength).addClass(pageClass).hide();
+
+				var maxPage = q;
+
+				$(".currentPage").text(pageNumber);
+				$(".totalPage").text(q);
+
+				$('.next').on('click',function(){
+	    		if(page < maxPage) {
+		    		$("#orderList > tr:visible").hide();
+	        	$('.page' + ++page).show();
+	        	pageNumber += 1;
+	        	$(".currentPage").text(pageNumber);
+				  }
+				});
+
+				$('.prev').on('click',function(){
+				  if(page > 1) {
+				    $("#orderList > tr:visible").hide();
+			      $('.page' + --page).show();
+			      pageNumber -= 1;
+	        	$(".currentPage").text(pageNumber);
+				  }
+				});
+
+			} else {
+				$(".currentPage").text('1');
+				$(".totalPage").text('1');
+			}
+
+		}, 2000);
 
 	};
 
 	
-
-	/*
-	var totalAmount;
-	ref.once("value", function(snapshot) {
-		var totalAmount = snapshot.numChildren();
-		console.log("Total amount: " + totalAmount);
-		for (i = 0; i < totalAmount; i++ ) {
-			var x = angular.element('#orderTimeId-0').val();
-			console.log(x);
-		};
-	});	
-	*/
-
+	
 });
 
 angular.module('ladyDeliveryApp').controller('orderController', function($scope) {
     // create a message to display in our view
     // $ocLazyLoad.load('js/addOrder.js');
+
+    map = new google.maps.Map(document.getElementById('map'), {
+  	center: {lat: -6.223095, lng: 106.842674},
+  	zoom: 11
+		});
 
     var user = firebase.auth().currentUser;
 		var name, email, photoUrl, uid;
@@ -509,7 +577,9 @@ angular.module('ladyDeliveryApp').controller('orderController', function($scope)
 		    var $formatTime = formatTime($postedTime);
 		    var $formatDate = formatDate($postedTime);
 
-		    $('form').on('submit', function(e) {
+
+
+		    $('form #add-order').on('click', function(e) {
 		    e.preventDefault();  
 
 		    var $fromName = $('#fromName');
@@ -559,6 +629,7 @@ angular.module('ladyDeliveryApp').controller('orderController', function($scope)
 		        success: function(data) {
 		            console.log("Order added!", data);
 		            console.log(uid);
+		            $("#order-status > p").text("Order added.");
 		        },
 		        error: function (jqXHR) {
 		            if (jqXHR.status == 401) {
@@ -578,7 +649,22 @@ angular.module('ladyDeliveryApp').controller('orderController', function($scope)
 		            console.log("Order added!", data);
 		        },
 		    });
+
 		});
+
+		// Calling Google Maps API
+
+		
+/*
+		$.ajax({
+        type: 'GET',
+        url: 'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins='+$fromAddress+'&destinations='+$toAddress+'&key='+googleApiKey,
+        success: function(data) {
+            console.log("Quote received!", data);
+            $("#quote-status > p").text("Quote received.");
+        },
+    });*/
+
 		});
 });
 
